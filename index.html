@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Lookup</title>
+    <style>
+        body {
+            background-color: black;
+            background-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(2,128,33,1) 100%);
+            color: #00ff00;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        #header {
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        #ip-input {
+            width: 80%;
+            max-width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            background: black;
+            color: #00ff00;
+        }
+
+        #lookup-btn {
+            margin-top: 10px;
+            background-color: #00ff00;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #lookup-btn:hover {
+            background-color: #007f00;
+        }
+
+        #result {
+            background-color: rgba(0, 0, 0, 0.8);
+            margin-top: 20px;
+            font-size: 16px;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+        
+        @media (max-width: 600px) {
+            #header {
+                font-size: 18px;
+            }
+            #ip-input, #lookup-btn {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <img id="logo" src="https://i.ibb.co/wrhRHfm/IMG-20241202-192824-954.jpg" alt="Logo"> 
+        <h1 id="header">IP Address Lookup By 
+            <a href="https://example.com" target="_blank" style="color: #00ff00; text-decoration: none;">Mrx_Cod4r</a>
+        </h1>
+        <input type="text" id="ip-input" placeholder="Enter IP Address">
+        <button id="lookup-btn">LOOKUP</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById("lookup-btn").addEventListener("click", function () {
+            var ipAddress = document.getElementById("ip-input").value;
+            if (!ipAddress) {
+                alert("Please enter an IP address.");
+                return;
+            }
+
+            fetch("https://ipinfo.io/" + ipAddress + "/json")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById("result").innerHTML = "IP not found.";
+                    } else {
+                        var result = "IP Address: " + data.ip + "<br>";
+                        result += "Country: " + data.country + "<br>";
+                        result += "City: " + data.city + "<br>";
+                        result += "Network: " + data.org + "<br>";
+                        result += "Google Map: " + `<a href="https://www.google.com/maps/@${data.loc}" target="_blank" style="color: #00ff00;">View Location</a>`;
+                        document.getElementById("result").innerHTML = result;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.getElementById("result").innerHTML = "An error occurred.";
+                });
+        });
+    </script>
+</body>
+</html>
